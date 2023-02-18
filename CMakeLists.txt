@@ -84,6 +84,7 @@ endif()
 
 # dependencies
 
+find_package(CURL REQUIRED)
 find_package(Threads REQUIRED)
 
 # on APPLE - include Accelerate framework
@@ -198,14 +199,15 @@ include(DefaultTargetOptions)
 
 target_include_directories(${TARGET} PUBLIC
     .
+     ${CURL_INCLUDE_DIRS}
     )
 
 if (MSVC)
-    target_link_libraries(${TARGET} PRIVATE ${WHISPER_EXTRA_LIBS} ${CMAKE_THREAD_LIBS_INIT})
+    target_link_libraries(${TARGET} PRIVATE ${WHISPER_EXTRA_LIBS} ${CMAKE_THREAD_LIBS_INIT} ${CURL_LIBRARIES})
 
     set(WHISPER_EXTRA_FLAGS ${WHISPER_EXTRA_FLAGS} -D_CRT_SECURE_NO_WARNINGS)
 else()
-    target_link_libraries(${TARGET} PRIVATE m ${WHISPER_EXTRA_LIBS} ${CMAKE_THREAD_LIBS_INIT})
+    target_link_libraries(${TARGET} PRIVATE m ${WHISPER_EXTRA_LIBS} ${CMAKE_THREAD_LIBS_INIT} ${CURL_LIBRARIES})
 endif()
 
 if (BUILD_SHARED_LIBS)
